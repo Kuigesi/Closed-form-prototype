@@ -71,7 +71,6 @@ object ImpLexer extends RegexParsers {
 
   def apply(code: String): Either[ImpLexerError, List[ImpToken]] = {
     parse(tokens, code) match {
-      //case NoSuccess(msg, next) => Left(ImpLexerError(msg))
       case Success(result, next) => Right(result)
       case Failure(msg,_) => Left(ImpLexerError("FAILURE: " + msg))
       case Error(msg,_) => Left(ImpLexerError("ERROR: " + msg))
@@ -169,7 +168,6 @@ object ImpParser extends PackratParsers {
   def apply(tokens: scala.collection.immutable.Seq[ImpToken]): Either[ImpParserError, Stmt] = {
     val reader = new PackratReader(new ImpTokenReader(tokens))
     program(reader) match {
-      //case NoSuccess(msg, next) => Left(ImpParserError(msg))
       case Success(result, next) => Right(result)
       case Failure(msg,_) => Left(ImpParserError("FAILURE: " + msg))
       case Error(msg,_) => Left(ImpParserError("ERROR: " + msg))
@@ -201,27 +199,3 @@ object TestSimpleParser {
     println(ImpCompiler(prog1))
   }
 }
-
-/*
-case class WordFreq(word: String, count: Int) {
-  override def toString = "Word <" + word + "> " +
-                          "occurs with frequency " + count
-}
-
-class ImpParser extends RegexParsers {
-  def word: Parser[String]    = """[a-z]+""".r        ^^ { _.toString }
-  def const_int: Parser[Expr]     = """(0|[1-9]\d*)""".r  ^^ { x => Const(x.toInt) }
-  def const_bool: Parser[Expr]    = """true|false""".r  ^^ { x => Const(x.toBoolean) }
-  def number: Parser[Int]     = """(0|[1-9]\d*)""".r  ^^ { _.toInt }
-  def freq: Parser[WordFreq]  = word ~ number         ^^ { case wd ~ fr => WordFreq(wd,fr) }
-}
-
-object TestSimpleParser extends ImpParser {
-  def main(args: Array[String]) = {
-    parse(const_int, "121") match {
-      case Success(matched,_) => println(matched)
-      case Failure(msg,_) => println("FAILURE: " + msg)
-      case Error(msg,_) => println("ERROR: " + msg)
-    }
-  }
-}*/
